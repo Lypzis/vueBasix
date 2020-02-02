@@ -1,0 +1,129 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Getting Started -- Vue</title>
+    <link rel="stylesheet" href="./index.css" />
+    <script src="./vue.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <!-- 
+      <input type="text" v-on:input="changeTitle" />
+      <p>{{ title }}</p>
+      -->
+      <h1 v-once>{{title}}</h1>
+      <p>{{ sayHello() }} - <a v-bind:href="link">Google</a></p>
+      <hr />
+      <!-- this might be dangerous to use, Remember -->
+      <p v-html="finishedLink"></p>
+      <button v-on:click="increase(2, $event)">Click Me</button>
+      <p>{{ counter }}</p>
+      <p v-on:mousemove="updateCoordinates">
+        Coordinates: {{ x }} / {{ y }} -
+        <span v-on:mousemove.stop="">DEAD SPOT</span>
+      </p>
+      <input type="text" v-on:keyup.enter.space="alertMe" />
+      <br />
+      <input type="text" v-model="name" />
+      <p>{{ name }}</p>
+      <br />
+      <button v-on:click="++counter2">Increase</button>
+      <button v-on:click="--counter2">Decrease</button>
+      <button v-on:click="++secondCounter">Increase Second</button>
+      <p>Counter: {{ counter2 }} | {{ secondCounter }}</p>
+      <p>Result: {{ result() }} | {{ output }}</p>
+      <button @click="changeLink">Change the link</button>
+      <!-- @ means v-on -->
+      <a :href="link">Link</a>
+      <!-- : means v-bind -->
+      <br />
+      <div
+        class="demo"
+        @click="attachRed = !attachRed"
+        :class="divClasses"
+      ></div>
+      <div class="demo" :class="{red: attachRed}"></div>
+      <div class="demo" :class="[color, {red: attachRed}]"></div>
+      <hr />
+      <input type="text" v-model="color" />
+    </div>
+
+    <script>
+      new Vue({
+        el: "#app",
+        data: {
+          title: "Hello World!",
+          link: "https://google.com",
+          finishedLink: "<a href='https://google.com'>Google</a>",
+          counter: 0,
+          counter2: 0,
+          secondCounter: 0,
+          x: 0,
+          y: 0,
+          name: "",
+          attachRed: false,
+          color: "green"
+        },
+        computed: {
+          // this is more optimal
+          // this runs only once the requirement is reached
+          output() {
+            console.log("inside computed");
+            return this.counter2 > 5 ? "Greater than 5" : "Smaller than 5";
+          },
+          divClasses() {
+            return {
+              red: this.attachRed,
+              blue: !this.attachRed
+            };
+          }
+        },
+        watch: {
+          // watches for changes in the attributes in 'data'
+          counter2: function(value) {
+            // executes whenever counter2 changes
+            const vm = this;
+            setTimeout(function() {
+              vm.counter2 = 0;
+            }, 3000);
+          }
+        },
+        methods: {
+          // functions here runs every time there is an update
+          /*changeTitle: function(event) {
+            this.title = event.target.value;
+          }*/
+          sayHello: function() {
+            this.title = "Hello";
+            return this.title;
+          },
+          increase: function(step, event) {
+            // event accessed by the protected type $event
+            this.counter += step;
+          },
+          updateCoordinates: function(event) {
+            this.x = event.clientX;
+            this.y = event.clientY;
+          },
+          dummy: function(event) {
+            event.stopPropagation(); // will stop any event occuryng, or
+            // just use a modifyer .stop
+          },
+          alertMe: function() {
+            // this will fire whenever 'enter' or 'space' are released
+            alert("Alert!");
+          },
+          result() {
+            console.log("inside methods");
+            return this.counter2 > 5 ? "Greater than 5" : "Smaller than 5";
+          },
+          changeLink() {
+            this.link = "https://apple.com";
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
