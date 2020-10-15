@@ -1,0 +1,11 @@
+<!-- Put this in the HTML section in JSFiddle! -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+
+<div id="app">
+<ul>
+  <li v-for='(ingredient, index) in ingredients' v-bind:key='ingredient'>{{ingredient}} {{index + 1}}</li>
+</ul>
+<button v-on:click="ingredients.push('spices')">Add New</button>
+<hr>
+  <span v-for='n in 10'>{{n}}</span>
+</div>
